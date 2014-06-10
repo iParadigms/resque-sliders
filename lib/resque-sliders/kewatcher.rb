@@ -38,12 +38,8 @@ module Resque
           @async = options[:async] || false # sync and wait by default
           @hupped = 0
 
-          Resque.redis = case options[:config]
-            when Hash
-              [options[:config]['host'], options[:config]['port'], options[:config]['db'] || 0].join(':')
-            else
-              options[:config]
-          end
+          Resque.redis = Redis.new(options[:config])
+
         end
 
         # run the daemon
