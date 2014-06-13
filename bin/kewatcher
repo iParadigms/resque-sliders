@@ -77,7 +77,7 @@ options[:config] = case options[:config]
     {url: 'redis://localhost:6379'}
   end
 
-require 'redis-sentinel' if options[:config][:sentinels]
+require 'redis-sentinel' if options[:config]['sentinels'] or options[:config][:sentinels]
 
 kewatcher = Resque::Plugins::ResqueSliders::KEWatcher.new(options)
 kewatcher.run!
