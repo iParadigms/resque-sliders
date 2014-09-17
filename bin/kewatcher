@@ -68,16 +68,5 @@ OptionParser.new do |opt|
 
 end.parse!
 
-options[:config] = case options[:config]
-  when Hash
-    options[:config][ENV['RAILS_ENV'] || 'development']
-  when String
-    { url: options[:config] }
-  when nil
-    {url: 'redis://localhost:6379'}
-  end
-
-require 'redis-sentinel' if options[:config]['sentinels'] or options[:config][:sentinels]
-
 kewatcher = Resque::Plugins::ResqueSliders::KEWatcher.new(options)
 kewatcher.run!

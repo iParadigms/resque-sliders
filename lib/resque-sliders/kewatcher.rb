@@ -38,6 +38,17 @@ module Resque
           @async = options[:async] || false # sync and wait by default
           @hupped = 0
 
+          options[:config] = case options[:config]
+            when Hash
+              options[:config]['resque'] or options[:config][ENV['RAILS_ENV'] || 'development'] or options[:config]
+            when String
+              { url: options[:config] }
+            when nil
+              {url: 'redis://localhost:6379'}
+            end
+
+          require 'redis-sentinel' if options[:config]['sentinels'] or options[:config][:sentinels]
+
           Resque.redis = Redis.new(options[:config])
 
         end
